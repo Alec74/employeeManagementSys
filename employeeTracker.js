@@ -28,26 +28,31 @@ const start = () => {
       choices: ['Add Department',
         'Add Role',
         'Add Employee',
-        'View Department',
-        'View Role',
+        'View Departments',
+        'View Roles',
         'View Employees',
-        'Update Employee Roles',
+        'Update Employee Role ID',
+        'Update Employee Manager ID',
         'EXIT'],
     })
     .then((answer) => {
-      // based on their answer, either call the bid or the post functions
+      // based on their answer, call the corresponding function
       if (answer.decision === 'Add Department') {
         addDepartment();
       } else if (answer.decision === 'Add Role') {
         addRole();
       } else if (answer.decision === 'Add Employee') {
-        addEmployee()
-      } else if (answer.decision === 'View Department') {
+        addEmployee();
+      } else if (answer.decision === 'View Departments') {
         viewDepartment();
-      } else if (answer.decision === 'View Role') {
-        viewRole()
+      } else if (answer.decision === 'View Roles') {
+        viewRole();
       } else if (answer.decision === 'View Employees') {
-        viewEmployee()
+        viewEmployee();
+      } else if (answer.decision === 'Update Employee Role ID') {
+        updateEmpRole();
+      } else if (answer.decision === 'Update Employee Manager ID') {
+        updateEmpManager();
       } else {
         connection.end();
       }
@@ -165,7 +170,7 @@ const addEmployee = () => {
       {
         name: 'mID',
         type: 'input',
-        message: 'What is the manager ID associated? (type "NULL" if n/a)',
+        message: 'What is the manager ID associated? (type "null" if n/a)',
       },
     ])
     .then((answer) => {
@@ -193,24 +198,113 @@ const addEmployee = () => {
 const viewDepartment = () => {
   connection.query('SELECT * FROM department', (err, res) => {
     if (err) throw err;
-    cTable(res);
-  })
+    console.table(res);
+    start();
+  });
 };
 
 // Function to view roles
 const viewRole = () => {
   connection.query('SELECT * FROM role', (err, res) => {
     if (err) throw err;
-    cTable(res);
-  })
+    console.table(res);
+    start();
+  });
 };
 
 // Function to view employees
 const viewEmployee = () => {
   connection.query('SELECT * FROM employee', (err, res) => {
     if (err) throw err;
-    cTable(res);
-  })
+    console.table(res);
+    start();
+  });
+};
+
+// Function to update Employee role
+const updateEmpRole = () => {
+  // Make selectable options for user update selection
+  connection.query('SELECT * FROM employee', (err, res) => {
+    if (err) throw err;
+    let all = [];
+    for (let i = 0; i < res.length; i++) {
+      all.push(res[i].first_name);
+    }
+    inquirer
+      .prompt([
+        {
+          name: "select",
+          type: "list",
+          message: "Select an employee to update",
+          choices: all,
+        },
+        {
+          name: "roleID",
+          type: "input",
+          message: "Please provide a new Role ID for the employee",
+        },
+      ])
+      .then((answer) => {
+        // update the employee role id
+        if (err) throw err;
+        connection.query('UPDATE employee SET ? WHERE ?',
+          [
+            {
+              role_id: answer.roleID,
+            },
+            {
+              first_name: answer.select,
+            },
+          ],
+          (err, res) => {
+            if (err) throw err;
+            viewEmployee();
+          })
+      })
+  });
+};
+
+// Function to update Employee manager
+const updateEmpManager = () => {
+  // Make selectable options for user update selection
+  connection.query('SELECT * FROM employee', (err, res) => {
+    if (err) throw err;
+    let all = [];
+    for (let i = 0; i < res.length; i++) {
+      all.push(res[i].first_name);
+    }
+    inquirer
+      .prompt([
+        {
+          name: "select",
+          type: "list",
+          message: "Select an employee to update",
+          choices: all,
+        },
+        {
+          name: "managerID",
+          type: "input",
+          message: "Please provide a new Manager ID for the employee",
+        },
+      ])
+      .then((answer) => {
+        // update the employee manager id
+        if (err) throw err;
+        connection.query('UPDATE employee SET ? WHERE ?',
+          [
+            {
+              manager_id: answer.managerID,
+            },
+            {
+              first_name: answer.select,
+            },
+          ],
+          (err, res) => {
+            if (err) throw err;
+            viewEmployee();
+          })
+      })
+  });
 };
 
 // connect to the mysql server and sql database
