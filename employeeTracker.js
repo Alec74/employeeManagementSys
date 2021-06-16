@@ -8,13 +8,10 @@ const inquirer = require('inquirer');
 // create the connection information for the sql database
 const connection = mysql.createConnection({
   host: 'localhost',
-
   // Your port; if not 3306
   port: 3306,
-
   // Your username
   user: process.env.DB_USER,
-
   // Your password
   password: process.env.DB_PASSWORD,
   // Database being accessed
@@ -45,6 +42,12 @@ const start = () => {
         addRole();
       } else if (answer.decision === 'Add Employee'){
         addEmployee()
+      } else if (answer.decision === 'View Department') {
+        viewDepartment();
+      } else if (answer.decision === 'View Role'){
+        viewRole()
+      } else if (answer.decision === 'View Employees'){
+        viewEmployee()
       }else {
         connection.end();
       }
@@ -186,11 +189,27 @@ const addEmployee = () => {
     });
 };
 
+// Function to view departments
+const viewDepartment = () => {
+  connection.query('SELECT * FROM departments', (err, res) => {
+    if (err) throw err;
+    cTable(res);
+  })
+};
+
+// Function to view roles
+const viewRole = () => {
+  
+};
+
+// Function to view employees
+const viewEmployee = () => {
+
+};
 
 // connect to the mysql server and sql database
 connection.connect((err) => {
   if (err) throw err;
   // console.log("Success!")
   start();
-
 });
