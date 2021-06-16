@@ -40,15 +40,15 @@ const start = () => {
         addDepartment();
       } else if (answer.decision === 'Add Role') {
         addRole();
-      } else if (answer.decision === 'Add Employee'){
+      } else if (answer.decision === 'Add Employee') {
         addEmployee()
       } else if (answer.decision === 'View Department') {
         viewDepartment();
-      } else if (answer.decision === 'View Role'){
+      } else if (answer.decision === 'View Role') {
         viewRole()
-      } else if (answer.decision === 'View Employees'){
+      } else if (answer.decision === 'View Employees') {
         viewEmployee()
-      }else {
+      } else {
         connection.end();
       }
     });
@@ -207,7 +207,10 @@ const viewRole = () => {
 
 // Function to view employees
 const viewEmployee = () => {
-
+  connection.query('SELECT * FROM employee', (err, res) => {
+    if (err) throw err;
+    cTable(res);
+  })
 };
 
 // connect to the mysql server and sql database
