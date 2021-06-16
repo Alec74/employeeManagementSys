@@ -21,6 +21,38 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
+// function which prompts the user for what action they should take
+const start = () => {
+  inquirer
+    .prompt({
+      name: 'decision',
+      type: 'list',
+      message: 'Please choose an option',
+      choices: ['Add Department',
+        'Add Role',
+        'Add Employee',
+        'View Department',
+        'View Role',
+        'View Employees',
+        'Update Employee Roles',
+        'EXIT'],
+    })
+    .then((answer) => {
+      // based on their answer, either call the bid or the post functions
+      if (answer.decision === 'Add Department') {
+        addDepartment();
+      } else if (answer.decision === 'Add Role') {
+        addRole();
+      } else if (answer.decision === 'Add Employee'){
+        addEmployee()
+      }else {
+        connection.end();
+      }
+    });
+};
+
+
+
 // Function to add a new department
 const addDepartment = () => {
   // prompt for info about department
@@ -49,7 +81,7 @@ const addDepartment = () => {
           if (err) throw err;
           console.log('Your new department was added successfully!');
           // re-prompt the user for if they want to continue or finish
-          // start();
+          start();
         }
       );
     });
@@ -95,7 +127,7 @@ const addRole = () => {
           if (err) throw err;
           console.log('Your new role was added successfully!');
           // re-prompt the user for if they want to continue or finish
-          // start();
+          start();
         }
       );
     });
@@ -148,7 +180,7 @@ const addEmployee = () => {
           if (err) throw err;
           console.log('Your new employee was added successfully!');
           // re-prompt the user for if they want to continue or finish
-          // start();
+          start();
         }
       );
     });
@@ -158,6 +190,7 @@ const addEmployee = () => {
 // connect to the mysql server and sql database
 connection.connect((err) => {
   if (err) throw err;
-  console.log("Success!")
+  // console.log("Success!")
+  start();
 
 });
