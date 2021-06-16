@@ -170,7 +170,7 @@ const addEmployee = () => {
       {
         name: 'mID',
         type: 'input',
-        message: 'What is the manager ID associated? (type "null" if n/a)',
+        message: 'What is the manager ID associated?',
       },
     ])
     .then((answer) => {
