@@ -32,7 +32,7 @@
 
   ## Questions
 
-  I can be contacted via email or my github account to answer questions related to building projects.
+  I can be contacted via email or my github account to answer any questions.
 
   * Github Profile: [Alec74](https://github.com/Alec74)
   * alecmcglone@gmail.com
