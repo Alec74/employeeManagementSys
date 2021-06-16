@@ -191,7 +191,7 @@ const addEmployee = () => {
 
 // Function to view departments
 const viewDepartment = () => {
-  connection.query('SELECT * FROM departments', (err, res) => {
+  connection.query('SELECT * FROM department', (err, res) => {
     if (err) throw err;
     cTable(res);
   })
@@ -199,7 +199,10 @@ const viewDepartment = () => {
 
 // Function to view roles
 const viewRole = () => {
-  
+  connection.query('SELECT * FROM role', (err, res) => {
+    if (err) throw err;
+    cTable(res);
+  })
 };
 
 // Function to view employees
